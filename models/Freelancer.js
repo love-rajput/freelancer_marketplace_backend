@@ -34,6 +34,10 @@ const freelancerSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  avatar: {
+    type: String,
+    default: ''
+  },
   orders: {
     type: Number,
     default: 0
