@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { createFreelancer, getFreelancer } = require('../controllers/freelancerController');
 
 
-router.post('/', authMiddleware, createFreelancer);
+router.post('/create', authMiddleware, createFreelancer);
 router.get('/', authMiddleware, getFreelancer);
 
 module.exports = router;

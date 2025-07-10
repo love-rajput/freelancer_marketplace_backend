@@ -2,14 +2,12 @@ const mongoose = require('mongoose');
 
 const freelancerSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true,
     unique: true  // ensure 1 freelancer profile per user
   },
-  username: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  username: { 
+    type: String,
     required: true
   },
   language: {
@@ -24,9 +22,9 @@ const freelancerSchema = new mongoose.Schema({
     type: String,
     required: true
   }],
-  avatar: {
-    type: String,
-    default: ''
+  experience: {
+    type: Number,
+    default: 0
   },
   rating: {
     type: Number,

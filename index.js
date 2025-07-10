@@ -17,7 +17,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/mail', mailRoutes);
-app.use('/api/freelancer', freelancerRoutes);
+app.use('/api/freelancers', freelancerRoutes);
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {
