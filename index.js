@@ -5,6 +5,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const mailRoutes = require('./routes/mail');
 const freelancerRoutes = require('./routes/freelanceFetchRoute');
+const gigsRoutes = require('./routes/gigsRoutes');
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/mail', mailRoutes);
 app.use('/api/freelancers', freelancerRoutes);
+app.use('/api/gigs', gigsRoutes);
 
 
 // Database connection
