@@ -65,6 +65,21 @@ exports.getGig = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+// get my gigs
+exports.getMyGigs = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const gigs = await Gigs.find({ userId })
+      .populate("userId", "username email")
+      .populate("freelancerId", "avatar");
+
+    res.status(200).json(gigs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 // update gig
 exports.updateGig = async (req, res) => {
@@ -72,10 +87,9 @@ exports.updateGig = async (req, res) => {
     const { title, description, category, price } = req.body;
     const update = { title, description, category, price };
     if (!req.user || !req.user.id) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: user not logged in" });
-    }
+  return res.status(401).json({ message: "Unauthorized: user not logged in" });
+}
+
 
     if (req.file?.path) {
       update.thumbnail = req.file.path;
