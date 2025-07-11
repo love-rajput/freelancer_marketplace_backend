@@ -69,17 +69,19 @@ exports.getGig = async (req, res) => {
 // update gig
 exports.updateGig = async (req, res) => {
   try {
-    const { title, description, catagory, price } = req.body;
-    const update = {
-      title,
-      description,
-      catagory,
-      price,
-    };
-    if (req.file?.path) {
-      update.thumnail = req.file.path;
+    const { title, description, category, price } = req.body;
+    const update = { title, description, category, price };
+    if (!req.user || !req.user.id) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: user not logged in" });
     }
-    const gig = await Gigs.findByIdAndUpdate(req.param.id, update, {
+
+    if (req.file?.path) {
+      update.thumbnail = req.file.path;
+    }
+
+    const gig = await Gigs.findByIdAndUpdate(req.params.id, update, {
       new: true,
     });
     res.status(200).json(gig);
