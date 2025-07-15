@@ -25,6 +25,7 @@ app.use('/api/freelancers', freelancerRoutes);
 app.use('/api/gigs', gigsRoutes);
 app.use('/api/checkout', checkoutRoutes);
 
+
 // Database connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,

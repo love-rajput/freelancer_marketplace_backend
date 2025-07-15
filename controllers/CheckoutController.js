@@ -28,8 +28,8 @@ export const createCheckoutSession = async (req, res) => {
       ],
       billing_address_collection: "required",
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      success_url: `${process.env.CLIENT_URL}success`,
+      cancel_url: `${process.env.CLIENT_URL}cancelpayment`,
     });
 
     // ADD THIS LINE TO SEND THE SESSION URL BACK TO THE CLIENT
