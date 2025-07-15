@@ -1,6 +1,6 @@
-import stripe from "../config/stripe.js";
-
-export const createCheckoutSession = async (req, res) => {
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+ 
+exports.createCheckoutSession = async (req, res) => {
   try {
     const { price, gig, userId, gigImg } = req.body;
 
@@ -28,7 +28,7 @@ export const createCheckoutSession = async (req, res) => {
       ],
       billing_address_collection: "required",
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}success`,
+      success_url: `${process.env.CLIENT_URL}paymentprocessing?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}cancelpayment`,
     });
 

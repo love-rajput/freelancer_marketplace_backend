@@ -7,6 +7,7 @@ const mailRoutes = require('./routes/mail');
 const freelancerRoutes = require('./routes/freelanceFetchRoute');
 const gigsRoutes = require('./routes/gigsRoutes');
 const checkoutRoutes = require('./routes/checkoutRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/mail', mailRoutes);
 app.use('/api/freelancers', freelancerRoutes);
 app.use('/api/gigs', gigsRoutes);
 app.use('/api/checkout', checkoutRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 // Database connection
