@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["processing", "completed", "cancelled"],
+      enum: ["processing", "in-progress", "submitted", "delivered"],
       default: "processing",
     },
     stripeSessionId: {
@@ -37,6 +37,20 @@ const orderSchema = new mongoose.Schema(
     freelancerName: {
       type: String,
       required: true,
+    },
+    deliveryFileUrl: {
+      type: String,
+    },
+    deliveryMessage: {
+      type: String,
+    },
+    clientRating: {
+      type: Number,
+      min: 0,
+      max: 5,
+    },
+    clientFeedback: {
+      type: String,
     },
   },
   { timestamps: true }
