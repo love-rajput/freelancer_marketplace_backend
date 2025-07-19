@@ -1,7 +1,6 @@
 const Order = require("../models/Order.js");
 const Freelancer = require("../models/Freelancer.js");
 
-
 exports.createOrder = async (req, res) => {
   try {
     const {
@@ -88,6 +87,7 @@ exports.deliverOrder = async (req, res) => {
 exports.accpetOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
+    console.log(order);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
@@ -100,15 +100,17 @@ exports.accpetOrder = async (req, res) => {
 };
 
 exports.leaveFeedback = async (req, res) => {
-  const { rating, feedback } = req.body;
+  console.log("leaveFeedback called");
+  console.log(req.body);
+  
+  const { rating, review } = req.body;
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-
     order.clientRating = rating;
-    order.clientFeedback = feedback;
+    order.clientFeedback = review;
     await order.save();
     res.status(200).json({ message: "Feedback submitted successfully", order });
   } catch (error) {
@@ -118,7 +120,7 @@ exports.leaveFeedback = async (req, res) => {
 
 exports.getFreelancerOrders = async (req, res) => {
   try {
-    const freelancerid = await Freelancer.findOne({ userId: req.user.id })
+    const freelancerid = await Freelancer.findOne({ userId: req.user.id });
     if (!freelancerid) {
       return res.status(404).json({ message: "Freelancer not found" });
     }
@@ -128,7 +130,6 @@ exports.getFreelancerOrders = async (req, res) => {
       .sort({ createdAt: -1 });
 
     res.status(200).json(orders);
-    
   } catch (error) {
     console.error("Error fetching freelancer orders:", error);
     res.status(500).json({ message: "Internal Server Error" });
