@@ -84,10 +84,9 @@ exports.deliverOrder = async (req, res) => {
   }
 };
 
-exports.accpetOrder = async (req, res) => {
+exports.acceptOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
-    console.log(order);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
@@ -96,13 +95,13 @@ exports.accpetOrder = async (req, res) => {
     }
     order.status = "delivered";
     await order.save();
-  } catch (error) {}
+    res.status(200).json({ message: "Order delivered", order });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 exports.leaveFeedback = async (req, res) => {
-  console.log("leaveFeedback called");
-  console.log(req.body);
-  
   const { rating, review } = req.body;
   try {
     const order = await Order.findById(req.params.id);
@@ -132,6 +131,20 @@ exports.getFreelancerOrders = async (req, res) => {
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching freelancer orders:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+exports.getOrderById = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate("userId", "username avatar")
+      .populate("gigId", "title thumbnail");
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    res.status(200).json(order);
+  } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
