@@ -10,7 +10,8 @@ const {
   getFreelancerOrders,
   leaveFeedback,
   getOrderById,
-
+  getFreelancerRatings,
+  getGigReviews,
 } = require("../controllers/orderController");
 
 router.post("/create-order", authMiddleware, createOrder);
@@ -23,4 +24,7 @@ router.get("/:id/single-order", authMiddleware, getOrderById);
 
 // Freelancer Orders
 router.get("/freelancer-order", authMiddleware, getFreelancerOrders);
+router.post("/freelancer/rating", authMiddleware, getFreelancerRatings);
+router.get("/gig/:gigId/reviews",authMiddleware, getGigReviews);
+
 module.exports = router;
