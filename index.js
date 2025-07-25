@@ -45,17 +45,23 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("addUser", (userId) => {
-    console.log("User added:", userId);
+    console.log("User added:", userId, socket.id);
     onlineUsers.set(userId, socket.id);
   });
 
-  socket.on("sendMessage", (data) => {
-    const { senderId, receiverId, text } = data;
+  socket.on("send-msg", (data) => {
+    const { senderUsername, avatar, senderId, receiverId, text } = data;
+    console.log(data);
+
     if (receiverId) {
       const receiverSocket = onlineUsers.get(receiverId);
+
       if (receiverSocket) {
-        io.to(receiverSocket).emit("getMessage", {
+        io.to(receiverSocket).emit("msg-receive", {
+          senderUsername,
+          avatar,
           senderId,
+          receiverId,
           text,
         });
       }
