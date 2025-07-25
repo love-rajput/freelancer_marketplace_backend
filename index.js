@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -29,15 +28,55 @@ app.use((req, res, next) => {
       "img-src 'self' https://*.stripe.com data: blob:;"
   );
   next();
+}); // Routes
+
+//------Socket Io------
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
 });
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("addUser", (userId) => {
+    console.log("User added:", userId);
+    onlineUsers.set(userId, socket.id);
+  });
+
+  socket.on("sendMessage", (data) => {
+    const { senderId, receiverId, text } = data;
+    if (receiverId) {
+      const receiverSocket = onlineUsers.get(receiverId);
+      if (receiverSocket) {
+        io.to(receiverSocket).emit("getMessage", {
+          senderId,
+          text,
+        });
+      }
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+const onlineUsers = new Map();
+
 // Routes
+
 app.use("/api/auth", authRoutes);
 app.use("/api/mail", mailRoutes);
 app.use("/api/freelancers", freelancerRoutes);
 app.use("/api/gigs", gigsRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", orderRoutes);
-
 // Database connection
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -48,6 +87,6 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
