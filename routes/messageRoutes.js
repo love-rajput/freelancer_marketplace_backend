@@ -4,7 +4,11 @@ const chatController = require("../controllers/chatController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 //Get all message
-router.get("/messages/:conversationId", authMiddleware, chatController.getMessages);
+router.get(
+  "/messages/:conversationId",
+  authMiddleware,
+  chatController.getMessages
+);
 
 // @route   POST /api/chat/conversation
 // @desc    Create new or return existing conversation between two users
@@ -21,5 +25,7 @@ router.get("/conversations", authMiddleware, chatController.getConversations);
 // @access  Private
 router.post("/message", authMiddleware, chatController.sendMessage);
 
-
-module.exports = router
+// Example Express route (Backend)
+router.post("/conversations/add-client", chatController.addClientToList);
+router.get("/conversations/clients", chatController.getAllClients);
+module.exports = router;

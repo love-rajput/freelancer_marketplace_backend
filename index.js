@@ -53,17 +53,18 @@ io.on("connection", (socket) => {
 
   socket.on("send-msg", async (data) => {
     const { senderUsername, avatar, senderId, receiverId, message } = data;
-
+    console.log(avatar);
+    
     if (receiverId) {
       const receiverSocket = onlineUsers.get(receiverId);
 
       if (receiverSocket) {
         io.to(receiverSocket).emit("msg-receive", {
           senderUsername,
-          avatar,
           senderId,
           receiverId,
           message,
+          avatar,
         });
       }
     }

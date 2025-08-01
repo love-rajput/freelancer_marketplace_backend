@@ -1,5 +1,6 @@
 const Conversation = require("../models/Conversation.js");
 const Message = require("../models/Message.js");
+const Client = require("../models/Client.js"); // Add this at the top
 
 // Create or get existing conversation
 exports.createConversation = async (req, res) => {
@@ -58,7 +59,6 @@ exports.getConversations = async (req, res) => {
 // ✅ Get all messages for a conversation
 exports.getMessages = async (req, res) => {
   try {
-    
     const { conversationId } = req.params;
     const messages = await Message.find({ conversationId }).sort({
       timestamp: 1,
@@ -92,6 +92,30 @@ exports.getLatestMessageForEachConversation = async (req, res) => {
     );
 
     res.status(200).json(latestMessages);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Add or get client info (no messages)
+exports.addClientToList = async (req, res) => {
+  try {
+    const { userId, username, avatar } = req.body;
+    let client = await Client.findOne({ userId });
+    if (!client) {
+      client = await Client.create({ userId, username, avatar });
+    }
+    res.status(201).json(client);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Get all clients
+exports.getAllClients = async (req, res) => {
+  try {
+    const clients = await Client.find();
+    res.json(clients);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }

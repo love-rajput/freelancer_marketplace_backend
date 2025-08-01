@@ -49,4 +49,19 @@ router.post("/", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// Fetch freelancer profile by userId
+router.get("/:userId", async (req, res) => {
+  try {
+    const freelancer = await Freelancer.findOne({ userId: req.params.userId });
+    if (!freelancer) {
+      return res.status(404).json({ message: "Freelancer not found" });
+    }
+    res.json(freelancer);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;
