@@ -6,10 +6,17 @@ const messageSchema = new mongoose.Schema({
     ref: "Conversation",
     required: true,
   },
-  senderId: String,
-  receiverId: String,
-  message: String,
-  roomId: String,
+  senderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Optional but useful for population later
+    required: true,
+  },
+  receiverId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Optional
+    required: true,
+  },
+  message: { type: String, required: true },
   timestamp: {
     type: Date,
     default: Date.now,

@@ -8,6 +8,7 @@ const freelancerRoutes = require("./routes/freelanceFetchRoute");
 const gigsRoutes = require("./routes/gigsRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const chatRoutes = require("./routes/messageRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
@@ -49,9 +51,8 @@ io.on("connection", (socket) => {
     onlineUsers.set(userId, socket.id);
   });
 
-  socket.on("send-msg", (data) => {
-    const { senderUsername, avatar, senderId, receiverId, text } = data;
-    console.log(data);
+  socket.on("send-msg", async (data) => {
+    const { senderUsername, avatar, senderId, receiverId, message } = data;
 
     if (receiverId) {
       const receiverSocket = onlineUsers.get(receiverId);
@@ -62,7 +63,7 @@ io.on("connection", (socket) => {
           avatar,
           senderId,
           receiverId,
-          text,
+          message,
         });
       }
     }
@@ -83,6 +84,8 @@ app.use("/api/freelancers", freelancerRoutes);
 app.use("/api/gigs", gigsRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/chat", chatRoutes);
+
 // Database connection
 mongoose
   .connect(process.env.MONGODB_URI, {
