@@ -1,67 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const Freelancer = require("../models/Freelancer");
 const authMiddleware = require("../middleware/authMiddleware");
+const {
+  createFreelancer,
+  getFreelancer,
+} = require("../controllers/freelancerController");
+const upload = require("../middleware/uploadCloudinary");
+const Freelancer = require("../models/Freelancer"); // Import Freelancer model
 
-// Create Freelancer Profile
-router.post("/", authMiddleware, async (req, res) => {
-  try {
-    const { role, id } = req.user;
+router.post("/create", authMiddleware, createFreelancer);
+router.get("/", authMiddleware, getFreelancer);
 
-    if (role !== "freelancer") {
-      return res
-        .status(403)
-        .json({ message: "Only freelancers can create profiles." });
+router.post(
+  "/upload-image",
+  authMiddleware,
+  upload.single("avatar"), // Change "image" to "avatar" to match the field name in the form data
+  async (req, res) => {
+    // Add async to the route handler
+    try {
+      const freelancer = await Freelancer.findOne({ userId: req.user.id });
+      if (!freelancer) {
+        return res
+          .status(404)
+          .json({ message: "Freelancer profile not found" });
+      }
+
+      // Cloudinary gives you the URL in req.file.path
+      freelancer.avatar = req.file.path;
+      await freelancer.save();
+
+      res
+        .status(200)
+        .json({ message: "Image uploaded", avatar: req.file.path });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Server error" });
     }
-
-    // Check if profile already exists
-    const existing = await Freelancer.findOne({ userId: id });
-    if (existing) {
-      return res
-        .status(400)
-        .json({ message: "Profile already exists for this user." });
-    }
-
-    // Get data from body
-    const { name, language, description, skills, avatar, category } = req.body;
-
-    if (!name || !language || !description || !skills) {
-      return res
-        .status(400)
-        .json({ message: "Please provide all required fields." });
-    }
-
-    const newFreelancer = new Freelancer({
-      userId: id,
-      name,
-      language,
-      description,
-      skills,
-      avatar,
-      category,
-    });
-
-    await newFreelancer.save();
-
-    res.status(201).json(newFreelancer);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
   }
-});
-
-// Fetch freelancer profile by userId
-router.get("/:userId", async (req, res) => {
-  try {
-    const freelancer = await Freelancer.findOne({ userId: req.params.userId });
-    if (!freelancer) {
-      return res.status(404).json({ message: "Freelancer not found" });
-    }
-    res.json(freelancer);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
+);
 
 module.exports = router;
