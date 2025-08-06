@@ -38,7 +38,7 @@ const { Server } = require("socket.io");
 
 const io = new Server(server, {
   cors: {
-    origin: "https://giglyy.netlify.app/",
+    origin: "https://giglyy.netlify.app",
     methods: ["GET", "POST"],
   },
 });
