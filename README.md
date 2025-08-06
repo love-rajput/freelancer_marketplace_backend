@@ -432,8 +432,8 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 
 ## 👥 Support
 
-For support, email support@gigly.com or join our Slack channel.
+For support, email jaysinhdarbar730@gmail.com or join our Slack channel.
 
 ---
 
-**Built with ❤️ by the Gigly Team**
+**Built with ❤️ by the Jay Thakor**
