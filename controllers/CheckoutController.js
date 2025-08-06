@@ -28,8 +28,8 @@ exports.createCheckoutSession = async (req, res) => {
       ],
       billing_address_collection: "required",
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}paymentprocessing?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}cancelpayment`,
+      success_url: `https://giglyy.netlify.app/paymentprocessing?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://giglyy.netlify.app/cancelpayment`,
     });
 
     // ADD THIS LINE TO SEND THE SESSION URL BACK TO THE CLIENT
