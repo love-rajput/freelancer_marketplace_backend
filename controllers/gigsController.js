@@ -84,7 +84,9 @@ exports.getMyGigs = async (req, res) => {
 exports.getOtherFreelancerGigs = async (req, res) => {
   try {
     const freelancerId = req.user.id; // Assuming the user is a freelancer
-    const freelancer = await Freelancer.findOne({ userId: freelancerId });
+    console.log(freelancerId);
+
+    const freelancer = await User.findOne({ _id: freelancerId });
     if (!freelancer) {
       return res.status(404).json({ message: "Freelancer profile not found" });
     }

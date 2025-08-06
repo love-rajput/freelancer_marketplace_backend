@@ -14,6 +14,7 @@ exports.createOrder = async (req, res) => {
       freelancerName,
       status = "processing",
     } = req.body;
+    console.log(userId);
 
     const order = new Order({
       userId,
