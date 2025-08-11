@@ -11,7 +11,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const chatRoutes = require("./routes/messageRoutes");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 const allowedOrigins = ["https://giglyy.netlify.app", "http://localhost:3000"];
@@ -107,3 +107,7 @@ mongoose
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error(err));
